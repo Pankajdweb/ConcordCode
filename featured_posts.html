@@ -1,0 +1,61 @@
+<!--
+isAvailableForNewContent: false
+label: Featured posts
+-->
+
+{% import "../../modules/macros.html" %} {% include "./post_loop.html" %} {%
+include "./post_card.html" %} {% macro FeaturedPostCardSmall() %}
+<div
+  class="Card Card--horizontal Card--type-image Card--linked Card--no-background"
+>
+  <div class="Card--inner">
+    <div class="Card--top">
+      <div
+        class="Card__image"
+        style="--card-image-aspect: 16/10; --card-image-fit: cover"
+      >
+        <img
+          loading="eager"
+          width="800"
+          height="500"
+          class="image--cover"
+          src="{{ resize_image_url(content.post_list_summary_featured_image, 0, 0, 800) }}"
+          alt="{{ content.featured_image_alt_text }}"
+        />
+      </div>
+    </div>
+    <div class="Card--bottom">
+      <div class="Card__text">
+        <div class="flow">
+          {% if content.topic_list %} {% set max_tags = 1 %}
+          <div class="TagRow">
+            {% for topic in content.topic_list %} {% if loop.index <= max_tags
+            %}
+            <a class="Tag" href="{{ blog_tag_url(group.id, topic.slug) }}"
+              >{{ topic }}</a
+            >
+            {% endif %} {% endfor %}
+          </div>
+          {% endif %}
+
+          <div class="Card__date">{{ content.publish_date_localized }}</div>
+          <h3 class="Card--post__title">{{ content.name }}</h3>
+        </div>
+      </div>
+      <div class="Button Button--card">
+        <a href="{{ content.absolute_url }}">Explore resource</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+<div class="FeaturedPosts grid">
+  <div class="FeaturedPosts--main">
+    {% for content in contents %} {% if loop.first %} {{ PostCard("eager") }} {%
+    endif %} {% endfor %}
+  </div>
+  <div class="FeaturedPosts--secondary">
+    {{ post_loop(2, 3, "", "{{FeaturedPostCardSmall()}}") }}
+  </div>
+</div>

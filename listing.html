@@ -1,0 +1,62 @@
+<!--
+  templateType: blog_listing
+  isAvailableForNewContent: true
+  label: Concord | Blog Listing
+-->
+
+{% import "../modules/macros.html" %} {% extends "./layouts/base.html" %} {%
+include "./partials/post_loop.html" %} {% include "./partials/post_card.html" %}
+{% block body %}
+<main id="main-content" class="BlogListing body-container-wrapper">
+  <div class="BlogListing--hero">
+    <div class="wrapper">
+      {# If topic or author show details #}
+      <div class="BlogListing__details">
+        <h1 class="BlogListing__title">{{ group.public_title }}</h1>
+
+        {% if topic or author %}
+        <div class="BlogListing__details-item">
+          {% if topic %}
+          <span class="BlogListing__details-label">Posts tagged with</span>
+          {% elif author %}
+          <span class="BlogListing__details-label">Posts by</span>
+          {% endif %}
+          <span class="BlogListing__details-value"
+            >{{ page_meta.html_title|split(" | ")|last }}</span
+          >
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="BlogListing--utilities">
+        {% module "blog_search_input" path="./../modules/search_input_custom",
+        label="Blog search", no_wrapper=true %} {% module "topic_selector"
+        path="./../modules/topic_selector", label="Topic selector",
+        no_wrapper=true %}
+      </div>
+    </div>
+  </div>
+
+  <div class="BlogListing--container">
+    <div class="wrapper">
+      {% if current_page_num == 1 and not topic and not author %}
+      <div class="FeaturedPosts__row">
+        {% include "./partials/featured_posts.html" %}
+      </div>
+      <div class="row">
+        {{ post_loop(4, 12, "BlogListing--grid", "{{PostCard()}}") }}
+      </div>
+      {% else %}
+      <div class="row">
+        {{ post_loop(1, 12, "BlogListing--grid", "{{PostCard()}}") }}
+      </div>
+      {% endif %}
+      <div class="row">{% include "./partials/pagination.html" %}</div>
+      <div class="BlogListing__dnd-footer">
+        {% dnd_area "dnd_footer" %} {% dnd_section %} {% end_dnd_section %} {%
+        end_dnd_area %}
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock body %}
